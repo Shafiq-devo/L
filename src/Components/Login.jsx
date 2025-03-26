@@ -1,30 +1,44 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useApi } from '../Hooks/useApi'
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  
+  const { response, loading, error, apicaller } = useApi();
+
+
+  useEffect(() => {
+    apicaller({ method: "GET", url: "https://jsonplaceholder.typicode.com/todos/1s",
+    });
+
+  }, []);
+
+  console.log('name',response)
+if(loading) return <h1>loading</h1>
+if(error)  return <p>eoooo</p>
+
 
   function handleSubmit() {
     const payload = { email, password };
     console.log(payload);
 
     // CALLING API THEN STORING A TOKEN
-    axios.post("https://api.escuelajs.co/api/v1/auth/login", payload)
+    axios
+      .post("https://api.escuelajs.co/api/v1/auth/login", payload)
       .then((res) => {
-        const token=res.data.access_token;
-        const expirytime= Date.now() + 1 * 60 * 1000;
-        localStorage.setItem("token", JSON.stringify({token,expirytime}));
+        const token = res.data.access_token;
+        const expirytime = Date.now() + 1 * 60 * 1000;
+        localStorage.setItem("token", JSON.stringify({ token, expirytime }));
         console.log("Success:", res);
-        navigate("/profile"); 
+        navigate("/profile");
 
-         setTimeout(() => {
-          localStorage.removeItem(token)
-          console.log('removed')
-         }, 2*60*1000);
-
+        setTimeout(() => {
+          localStorage.removeItem(token);
+          console.log("removed");
+        }, 2 * 60 * 1000);
       })
       .catch((err) => {
         console.error("Login error:", err);
