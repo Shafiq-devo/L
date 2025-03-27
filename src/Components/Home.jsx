@@ -4,11 +4,9 @@ import { useApi } from '../Hooks/useApi';
 export const Home = () => {
 const {response,loading,error,apicaller}=useApi()
 
-
-useEffect(() => {
-  apicaller({ method: "GET", url: "https://jsonplaceholder.typicode.com/todos",  })
-
- },[]);
+useEffect(()=>{
+  apicaller({method:'GET',url:'https://jsonplaceholder.typicode.com/todos'})
+},[])
 
 
 console.log('name',response)
