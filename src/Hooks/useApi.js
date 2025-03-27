@@ -1,37 +1,33 @@
 import axios from "axios";
 import { useState } from "react";
 
-const useApi=()=>{
+const useApi = () => {
+    const [response, setresponse] = useState(null)
+    const [loading, setloading] = useState(null)
+    const [error, setError] = useState(false)
 
-const [response,setResponse]=useState(null)
-const [loading,setLoading]=useState(null)
-const [error,setError]=useState(null)
+    const apicaller = async({ method, url, data, config }) => {
 
+        setError(null)
+        setloading(true)
+        try {
+            const res = await axios({ method, url, data, ...config })
 
-const apicaller=async({method,url,data,config})=>{
-setLoading(true)
-setError(null)
-try {
-    const res=await  axios({method,url,data,config})
-
-    if(!res.data){
-        setError(res.error.message||'Api calling falied ')
+            if (!res.data) {
+                setError(res.error.message || 'Api calling falied ')
+            }
+            if(res.data){
+                setresponse(res.data)
+            }
+        } catch (error) {
+            console.log('error', error)
+        } finally {
+            setloading(false)
+        }
     }
 
-    if(res.data){
-        setResponse(res.data)
-    }
 
-} catch (error) {
-    console.log('error',error)
-}finally{
-    setLoading(false)
-}
+    return ({ response, loading, error, apicaller })
 }
 
-return {response,loading,error,apicaller}
-
-
-}
-
-export{useApi}
+export { useApi }
