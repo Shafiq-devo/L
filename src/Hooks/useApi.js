@@ -6,7 +6,7 @@ const useApi = () => {
     const [loading, setloading] = useState(null)
     const [error, setError] = useState(false)
 
-    const apicaller = async({ method, url, data, config }) => {
+        const apicaller=async({method,url,data,config})=>{
 
         setError(null)
         setloading(true)
@@ -14,7 +14,7 @@ const useApi = () => {
             const res = await axios({ method, url, data, ...config })
 
             if (!res.data) {
-                setError(res.error.message || 'Api calling falied ')
+                setError(res.error.message || 'Api calling falied ') 
             }
             if(res.data){
                 setresponse(res.data)
